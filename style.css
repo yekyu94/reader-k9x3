@@ -27,6 +27,8 @@ body {
   inset: 0;
   display: flex;
   flex-direction: column;
+  /* 문서(html) 배경은 safe area 칠하기 용도로 동적 변경되므로 body에 고정 배경 지정 */
+  background: var(--bg);
 }
 
 #header {

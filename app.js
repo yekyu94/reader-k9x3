@@ -92,6 +92,9 @@
 
     elTitle.textContent = name;
     setupMediaSession(name);
+    // iOS가 홈바 아래를 문서 배경색으로 칠하는 경우 대비:
+    // 컨트롤 바와 같은 색으로 바꿔 이어져 보이게 함
+    document.documentElement.style.backgroundColor = "#1e293b";
     elEmpty.hidden = true;
     elSentences.hidden = false;
     elControls.hidden = false;
