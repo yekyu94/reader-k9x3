@@ -93,6 +93,11 @@ body {
   color: var(--text-dim);
 }
 
+.version {
+  font-size: 12px !important;
+  color: #475569;
+}
+
 .sentences {
   padding: 16px 16px 32px;
   font-size: 18px;

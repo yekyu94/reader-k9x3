@@ -328,7 +328,15 @@
 
   // ---------- PWA ----------
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    // 실행할 때마다 새 버전 확인
+    navigator.serviceWorker.register("sw.js").then((reg) => reg.update()).catch(() => {});
+    // 새 서비스 워커가 활성화되면 (파일 읽는 중이 아닐 때만) 자동 새로고침
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloaded || sentences.length) return;
+      reloaded = true;
+      location.reload();
+    });
   }
 
   // 테스트용 훅 (콘솔/자동화에서 텍스트 직접 로드)
