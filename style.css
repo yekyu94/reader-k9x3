@@ -21,6 +21,10 @@ html, body {
 }
 
 body {
+  /* iOS 홈 화면 앱에서 height:100%가 화면보다 작게 잡히는 문제 방지:
+     화면 네 모서리에 강제 고정 */
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
 }
@@ -121,7 +125,7 @@ body {
 #controls {
   background: var(--surface);
   /* 하단 홈바 영역까지 컨트롤 바 배경으로 채움 */
-  padding: 10px 16px calc(14px + env(safe-area-inset-bottom));
+  padding: 10px 16px calc(6px + env(safe-area-inset-bottom));
   border-top: 1px solid #334155;
 }
 
