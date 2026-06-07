@@ -91,6 +91,7 @@
     );
 
     elTitle.textContent = name;
+    setupMediaSession(name);
     elEmpty.hidden = true;
     elSentences.hidden = false;
     elControls.hidden = false;
@@ -181,13 +182,67 @@
     speechSynthesis.cancel();
     isPlaying = true;
     updatePlayButton();
+    startKeepAlive(); // 사용자 제스처 컨텍스트 안에서 시작해야 함
+    if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing";
     speakSentence(index);
   }
 
   function stopSpeech() {
     isPlaying = false;
     speechSynthesis.cancel();
+    stopKeepAlive();
+    if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused";
     updatePlayButton();
+  }
+
+  // ---------- 잠금 화면 재생 유지 ----------
+  // iOS는 화면이 잠기면 웹페이지 JS를 멈추지만, 오디오가 재생 중이면 유지함.
+  // 무음 WAV를 루프 재생해 "음악 재생 중" 상태로 만들어 TTS가 계속 동작하게 한다.
+  let keepAliveAudio = null;
+
+  function makeSilentWavUrl() {
+    const sampleRate = 8000;
+    const n = sampleRate; // 1초 분량 무음
+    const buf = new ArrayBuffer(44 + n * 2);
+    const v = new DataView(buf);
+    const writeStr = (off, s) => { for (let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); };
+    writeStr(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); writeStr(8, "WAVE");
+    writeStr(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, sampleRate, true); v.setUint32(28, sampleRate * 2, true);
+    v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+    writeStr(36, "data"); v.setUint32(40, n * 2, true);
+    return URL.createObjectURL(new Blob([buf], { type: "audio/wav" }));
+  }
+
+  function startKeepAlive() {
+    if (!keepAliveAudio) {
+      keepAliveAudio = new Audio(makeSilentWavUrl());
+      keepAliveAudio.loop = true;
+      keepAliveAudio.setAttribute("playsinline", "");
+    }
+    keepAliveAudio.play().catch(() => {});
+  }
+
+  function stopKeepAlive() {
+    keepAliveAudio?.pause();
+  }
+
+  // 잠금/백그라운드에서 합성이 멈추는 경우 대비한 주기적 재개 핑
+  setInterval(() => {
+    if (isPlaying) speechSynthesis.resume();
+  }, 5000);
+
+  // 잠금 화면 컨트롤 (재생/일시정지/이전/다음 문장)
+  function setupMediaSession(name) {
+    if (!("mediaSession" in navigator)) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: name,
+      artist: "TXT 리더",
+    });
+    navigator.mediaSession.setActionHandler("play", () => playFrom(currentIndex));
+    navigator.mediaSession.setActionHandler("pause", () => { stopSpeech(); savePosition(); });
+    navigator.mediaSession.setActionHandler("previoustrack", () => jump(-1));
+    navigator.mediaSession.setActionHandler("nexttrack", () => jump(1));
   }
 
   elPlay.addEventListener("click", () => {
@@ -238,7 +293,9 @@
   });
 
   const savedRate = localStorage.getItem("txtreader:rate");
-  if (savedRate) elRate.value = savedRate;
+  if (savedRate && [...elRate.options].some((o) => o.value === savedRate)) {
+    elRate.value = savedRate;
+  }
 
   // ---------- UI 갱신 ----------
   function highlight(index, scroll) {

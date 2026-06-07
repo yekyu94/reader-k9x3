@@ -1,5 +1,5 @@
 /* 오프라인 사용을 위한 서비스 워커 (캐시 우선) */
-const CACHE = "txtreader-v1";
+const CACHE = "txtreader-v2";
 const ASSETS = ["./", "index.html", "style.css", "app.js", "manifest.json", "icon-180.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {
