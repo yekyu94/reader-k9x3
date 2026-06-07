@@ -23,16 +23,14 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  /* 아이폰 노치/홈바 영역 회피 */
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 #header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  /* 상단 노치/상태바 영역까지 헤더 배경으로 채움 */
+  padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
   background: var(--surface);
   position: sticky;
   top: 0;
@@ -122,7 +120,8 @@ body {
 
 #controls {
   background: var(--surface);
-  padding: 10px 16px 14px;
+  /* 하단 홈바 영역까지 컨트롤 바 배경으로 채움 */
+  padding: 10px 16px calc(14px + env(safe-area-inset-bottom));
   border-top: 1px solid #334155;
 }
 
