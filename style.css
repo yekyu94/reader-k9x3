@@ -1,0 +1,180 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --accent: #38bdf8;
+  --highlight: rgba(56, 189, 248, 0.18);
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  /* 아이폰 노치/홈바 영역 회피 */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+#title {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+#main {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100%;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.empty p:first-child { font-size: 56px; }
+
+.primary-btn {
+  background: var(--accent);
+  color: #0f172a;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 36px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.enc-label {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.sentences {
+  padding: 16px 16px 32px;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.sentence {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.sentence.current {
+  background: var(--highlight);
+  color: #fff;
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.sentence.para-end { margin-bottom: 14px; }
+
+#controls {
+  background: var(--surface);
+  padding: 10px 16px 14px;
+  border-top: 1px solid #334155;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+#progressText {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  min-width: 70px;
+}
+
+#progressBar {
+  flex: 1;
+  accent-color: var(--accent);
+  height: 24px;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 8px;
+}
+
+.ctrl-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.ctrl-btn.play { font-size: 40px; }
+
+.option-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.option-row select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 13px;
+  max-width: 150px;
+}
+
+select { font-size: 16px; } /* iOS 자동 확대 방지 */

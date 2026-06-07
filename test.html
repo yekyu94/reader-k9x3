@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- 개발 검증용 페이지: app.js 로드 후 샘플 텍스트를 자동 주입 -->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TXT 리더 테스트</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header id="header">
+    <h1 id="title">TXT 리더</h1>
+    <button id="btnOpen" class="icon-btn">📂</button>
+  </header>
+  <main id="main">
+    <div id="empty" class="empty">
+      <p>📖</p>
+      <p>비어있음</p>
+      <button id="btnOpenBig" class="primary-btn">파일 열기</button>
+      <label class="enc-label">인코딩:
+        <select id="encoding"><option value="auto" selected>자동 감지</option></select>
+      </label>
+    </div>
+    <div id="sentences" class="sentences" hidden></div>
+  </main>
+  <footer id="controls" hidden>
+    <div class="progress-row">
+      <span id="progressText">0 / 0</span>
+      <input type="range" id="progressBar" min="0" max="0" value="0">
+    </div>
+    <div class="control-row">
+      <button id="btnPrev" class="ctrl-btn">⏮</button>
+      <button id="btnPlay" class="ctrl-btn play">▶️</button>
+      <button id="btnNext" class="ctrl-btn">⏭</button>
+    </div>
+    <div class="option-row">
+      <label>속도 <select id="rate"><option value="1" selected>1×</option></select></label>
+      <label>음성 <select id="voice"></select></label>
+    </div>
+  </footer>
+  <input type="file" id="fileInput" hidden>
+  <script src="app.js"></script>
+  <script>
+    const sample = `옛날 옛적 어느 마을에 한 소년이 살고 있었습니다. 소년은 매일 아침 일찍 일어나 산에 올랐습니다. "오늘은 무엇을 발견하게 될까?" 소년은 항상 궁금해했습니다.
+
+산 정상에 오르자 멀리 바다가 보였습니다! 소년은 언젠가 저 바다를 건너 새로운 세상을 보고 싶다고 생각했습니다.
+
+세월이 흘러 소년은 어른이 되었고, 마침내 배를 타고 바다를 건넜습니다.`;
+    window.__txtreader.loadText(sample, "샘플.txt", "test-sample");
+    // 분할 결과 콘솔 출력
+    document.title = "문장수: " + document.querySelectorAll(".sentence").length;
+  </script>
+</body>
+</html>
